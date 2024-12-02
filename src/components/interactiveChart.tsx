@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { ScatterChart } from '@mantine/charts';
 import { Button, Group } from '@mantine/core';
 import { kmeans } from '../utils/k-means';
@@ -13,6 +13,11 @@ type Props = {
 const InteractiveScatterChart = ({ k, maxIterations }: Props) => {
 
     const [disabled, setDisabled] = useState(false)
+
+    useEffect(() => {
+        normalizeData()
+        disabled && setDisabled(!disabled)
+    }, [k])
 
 
     const chartRef = useRef(null);
@@ -35,13 +40,7 @@ const InteractiveScatterChart = ({ k, maxIterations }: Props) => {
 
     const handleChartClick = (event: any) => {
 
-        setChartData(prevData => [{
-            color: 'yellow.5',
-            data: prevData.map(cluster => cluster.data).flat(),
-            name: "new",
-        }]);
-
-
+        normalizeData()
 
         if (!event || !event.nativeEvent || !chartRef.current) return;
 
@@ -69,10 +68,20 @@ const InteractiveScatterChart = ({ k, maxIterations }: Props) => {
         }
     };
 
-    const handleReset = () => {
+
+    const normalizeData = useCallback(() => {
+        setChartData(prevData => [{
+            color: 'yellow.5',
+            data: prevData.map(cluster => cluster.data).flat(),
+            name: "new",
+        }]);
+    }, [chartData])
+
+
+    const handleReset = useCallback(() => {
         setChartData([{
             color: 'blue.5',
-            name: 'Group 1',
+            name: 'Inital State',
             data: [
                 { X: 25, Y: 20 },
                 { X: 30, Y: 22 },
@@ -86,7 +95,7 @@ const InteractiveScatterChart = ({ k, maxIterations }: Props) => {
         }]);
         setDisabled(false)
 
-    };
+    }, [chartData]);
 
 
     const handleInvokeKMeans = () => {
@@ -137,7 +146,7 @@ const InteractiveScatterChart = ({ k, maxIterations }: Props) => {
                     Reset Points
                 </Button>
 
-                <Button  disabled={disabled} onClick={handleInvokeKMeans} variant="light">
+                <Button disabled={disabled} onClick={handleInvokeKMeans} variant="light">
                     invoke K-means
                 </Button>
             </Group>
