@@ -1,5 +1,4 @@
-import { ScatterChart } from '@mantine/charts';
-import { Box, Button, Container, createTheme, Divider, MantineProvider, NumberInput, Text } from '@mantine/core';
+import { Container, createTheme, Divider, MantineProvider, NumberInput, Text } from '@mantine/core';
 import '@mantine/charts/styles.css';
 
 import '@mantine/core/styles.css';
@@ -9,7 +8,7 @@ function App() {
 
 
   const theme = createTheme({
-    
+
   });
 
 
@@ -25,7 +24,7 @@ function App() {
 
         <Container my={100}  >
 
-          <InteractiveScatterChart k={k} maxIterations={maxIterations}/>
+          <InteractiveScatterChart k={k} maxIterations={maxIterations} />
 
 
           <Divider labelPosition='left' size={'xl'} my={'xl'} label={<Text size='xl'>Settings</Text>} />

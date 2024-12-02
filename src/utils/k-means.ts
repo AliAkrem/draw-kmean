@@ -74,71 +74,71 @@ function calculateNewCentroids(
   return newCentroids;
 }
 
-function main() {
-  // Example usage
-  const points: Point[] = [
-    new Point(1, 1),
-    new Point(1, 2),
-    new Point(2, 1),
-    new Point(1, 3),
-    new Point(3, 3),
-    new Point(4, 2),
-    new Point(4, 3),
-    new Point(5, 3),
-  ];
+// function main() {
+//   // Example usage
+//   const points: Point[] = [
+//     new Point(1, 1),
+//     new Point(1, 2),
+//     new Point(2, 1),
+//     new Point(1, 3),
+//     new Point(3, 3),
+//     new Point(4, 2),
+//     new Point(4, 3),
+//     new Point(5, 3),
+//   ];
 
-  const k = 2;
-  const maxIterations = 100;
+//   const k = 2;
+//   const maxIterations = 100;
 
-  let centroids: Point[] = points.slice(0, k);
+//   let centroids: Point[] = points.slice(0, k);
 
-  let assignments: number[] = Array(points.length).fill(0);
+//   let assignments: number[] = Array(points.length).fill(0);
 
-  let didCenterChange = false;
-  let iteration = 0;
+//   let didCenterChange = false;
+//   let iteration = 0;
 
-  while (!didCenterChange && iteration < maxIterations) {
-    // Assign points to the closest centroid
-    for (let i = 0; i < points.length; i++) {
-      assignments[i] = findClosestCentroid(points, centroids, i);
-    }
+//   while (!didCenterChange && iteration < maxIterations) {
+//     // Assign points to the closest centroid
+//     for (let i = 0; i < points.length; i++) {
+//       assignments[i] = findClosestCentroid(points, centroids, i);
+//     }
 
-    // Calculate new centroids
-    const newCentroids = calculateNewCentroids(points, assignments, k);
+//     // Calculate new centroids
+//     const newCentroids = calculateNewCentroids(points, assignments, k);
 
-    // Check for convergence
-    didCenterChange = true;
+//     // Check for convergence
+//     didCenterChange = true;
 
-    for (let i = 0; i < k; i++) {
-      if (euclideanDistance(centroids[i], newCentroids[i]) > 1e-6) {
-        didCenterChange = false;
-        break;
-      }
-    }
+//     for (let i = 0; i < k; i++) {
+//       if (euclideanDistance(centroids[i], newCentroids[i]) > 1e-6) {
+//         didCenterChange = false;
+//         break;
+//       }
+//     }
 
-    console.log(`+======= Iteration ${iteration}==========+`);
+//     console.log(`+======= Iteration ${iteration}==========+`);
 
-    for (let i = 0; i < points.length; i++) {
-      console.log(
-        `Point (${points[i].x}, ${points[i].y}) assigned to cluster ${assignments[i]} center (${centroids[assignments[i]].x}, ${centroids[assignments[i]].y})`
-      );
-    }
+//     for (let i = 0; i < points.length; i++) {
+//       console.log(
+//         `Point (${points[i].x}, ${points[i].y}) assigned to cluster ${assignments[i]} center (${centroids[assignments[i]].x}, ${centroids[assignments[i]].y})`
+//       );
+//     }
 
-    console.log(`+========================================+`);
+//     console.log(`+========================================+`);
 
-    centroids = newCentroids;
-    iteration++;
-  }
+//     centroids = newCentroids;
+//     iteration++;
+//   }
 
-  // Print the cluster assignments
+//   // Print the cluster assignments
 
-  console.log("+=========== Final Assignment ==========+");
-  for (let i = 0; i < points.length; i++) {
-    console.log(
-      `Point (${points[i].x}, ${points[i].y}) assigned to cluster ${assignments[i]}`
-    );
-  }
-}
+//   console.log("+=========== Final Assignment ==========+");
+//   for (let i = 0; i < points.length; i++) {
+//     console.log(
+//       `Point (${points[i].x}, ${points[i].y}) assigned to cluster ${assignments[i]}`
+//     );
+//   }
+// }
 
 type KmeansProps = {
   data: {

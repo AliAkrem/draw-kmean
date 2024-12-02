@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { ScatterChart } from '@mantine/charts';
 import { Button, Group } from '@mantine/core';
 import { kmeans } from '../utils/k-means';
