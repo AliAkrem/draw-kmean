@@ -1,6 +1,6 @@
 import { createUniqueMantineColorGenerator } from "./genColor";
 
-class Point {
+export class Point {
   constructor(
     public x: number,
     public y: number
@@ -14,7 +14,7 @@ class Point {
  * @param p2 - The second point.
  * @returns The Euclidean distance between the two points.
  */
-function euclideanDistance(p1: Point, p2: Point): number {
+export function euclideanDistance(p1: Point, p2: Point): number {
   return Math.sqrt(Math.pow(p1.x - p2.x, 2) + Math.pow(p1.y - p2.y, 2));
 }
 
@@ -150,6 +150,10 @@ type KmeansProps = {
 };
 
 type KmeansReturn = {
+  ite: Ite[];
+};
+
+export type Ite = {
   chartData: {
     color: string;
     name: string;
@@ -174,7 +178,11 @@ export function kmeans({ data, k, maxIterations }: KmeansProps): KmeansReturn {
   let didCenterChange = false;
   let iteration = 0;
 
-  while (!didCenterChange && iteration < maxIterations) {
+  let ite: Ite[] = [];
+
+  while (!didCenterChange && maxIterations > iteration) {
+    iteration++;
+
     // Assign points to the closest centroid
     for (let i = 0; i < points.length; i++) {
       assignments[i] = findClosestCentroid(points, centroids, i);
@@ -192,39 +200,44 @@ export function kmeans({ data, k, maxIterations }: KmeansProps): KmeansReturn {
         break;
       }
     }
+
+    ite = [
+      ...ite,
+      {
+        chartData: [
+          ...Array(k)
+            .fill(null)
+            .map((_, clusterIndex) => {
+              // Get all points belonging to this cluster
+              const clusterPoints = points
+                .filter(
+                  (_, pointIndex) => assignments[pointIndex] === clusterIndex
+                )
+                .map((point) => ({ X: point.x, Y: point.y }));
+
+              return {
+                color: getUniqueColor.getRandomUniqueMantineColor(clusterIndex),
+                name: `Cluster ${clusterIndex + 1}`,
+                data: clusterPoints,
+              };
+            }),
+          ...centroids.map((center, idx) => {
+            return {
+              color: "white",
+              name: `center ${idx}`,
+              data: [{ X: center.x, Y: center.y }],
+            };
+          }),
+        ],
+      },
+    ];
+
     centroids = newCentroids;
-    iteration++;
   }
 
-  getUniqueColor.reset();
 
-  const response: KmeansReturn = {
-    chartData: Array(k)
-      .fill(null)
-      .map((_, clusterIndex) => {
-        // Get all points belonging to this cluster
-        const clusterPoints = points
-          .filter((_, pointIndex) => assignments[pointIndex] === clusterIndex)
-          .map((point) => ({ X: point.x, Y: point.y }));
-
-        return {
-          color: getUniqueColor.getRandomUniqueMantineColor(),
-          name: `Cluster ${clusterIndex}`,
-          data: clusterPoints,
-        };
-      }),
-  };
 
   return {
-    chartData: [
-      ...response.chartData,
-      ...centroids.map((center) => {
-        return {
-          color: "white",
-          name: `center `,
-          data: [{ X: center.x, Y: center.y }],
-        };
-      }),
-    ],
+    ite,
   };
 }

@@ -11,14 +11,16 @@ export function createUniqueMantineColorGenerator() {
     "violet",
     "indigo",
     "cyan",
-    "lime"
+    "lime",
   ];
   const shades = [8];
   let usedColors = new Set(); // Tracks used colors
 
-  
+  function getRandomUniqueMantineColor(idx?: number) {
+    if (idx != null) {
+      return `${colors[idx]}.8`;
+    }
 
-  function getRandomUniqueMantineColor() {
     if (usedColors.size >= colors.length * shades.length) {
       throw new Error("No more unique colors available.");
     }
@@ -32,13 +34,10 @@ export function createUniqueMantineColorGenerator() {
 
     usedColors.add(color);
     return color;
-  };
+  }
   function reset() {
     usedColors = new Set(); // Clear the set
   }
 
-
   return { getRandomUniqueMantineColor, reset };
-
-
 }
