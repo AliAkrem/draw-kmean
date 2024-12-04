@@ -63,7 +63,7 @@ function App() {
               allowNegative={false}
               value={maxIterations}
               onChange={setMaxIterations}
-              min={2}
+              min={1}
             />
           </AppShell.Navbar>
           <AppShell.Main>
